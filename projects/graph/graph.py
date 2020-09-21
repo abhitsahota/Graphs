@@ -212,18 +212,28 @@ class Graph:
 
         This should be done using recursion.
         """
-        path.append(starting_vertex)
+        visited = set()
+        return self.dft_recursive_helper([starting_vertex], destination_vertex, visited)
+    
+    # retuns path starting vertex to destination vertex, else retunr empty list
+    def dfs_recursive_helper(self, curr_path, destination_vertex, visited):
+        curr_vertex = curr_path[-1]
 
+        if curr_vertex == destination_vertex: #base case
+            return curr_path
 
-        for neighbor in self.vertices[starting_vertex]:
-            if neighbor not in path:
-                if neighbor == destination_vertex:
-                    path.append(neighbor)
-                    return path
-                else:
-                    path = self.dfs_recursive(neighbor, destination_vertex, path)
+        visited.add(curr_vertex)
 
-        return path
+        for neighbors in self.get_neighbors(curr_vertex):
+            if neighbors not in visited:
+                new_path = list(path)
+                new_path.append(neighbors)
+                res = self.dfs_recursive_helper(new_path, destination_vertex, visited)
+                if len(res) > 0: # if non empty array is returned
+                    return res
+
+        return []
+
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
