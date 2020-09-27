@@ -1,3 +1,8 @@
+import random
+import math
+
+from collections import deque
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -45,8 +50,27 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
 
         # Add users
+        for i in range(num_users):
+            self.add_user(f'User {i}')
 
         # Create friendships
+        # Generate all possible friendships and put them into the array
+        # Shuffle the friendship array
+
+        # Take first num users * avg_friendships / 2 and that will be friendships for that graph
+
+        poss_friendships = []
+        for user_id in self.users:
+            # To prevent duplicate friends create from user_id + 1
+            for friend_id in range(user_id + 1, self.last_id + 1):
+                poss_friendships.append((user_id, friend_id))
+
+        random.shuffle(poss_friendships)
+
+        for i in range(math.floor((num_users * avg_friendships) / 2)):
+            friendship = poss_friendships[i]
+            self.add_friendship(friendship[0], friendship[1])
+
 
     def get_all_social_paths(self, user_id):
         """
@@ -59,7 +83,27 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        # we want to do a BFT and record the shortest path for each unique node that is encountered
+
+        the_que = deque()
+        the_que.append([user_id])
+
+        while len(the_que) > 0:
+            currPath = the_que.popleft()
+            currNode = currPath[-1]
+            visited[currNode] = currPath
+
+
+            for friend in self.friendships[currNode]:
+                if friend not in visited:
+                    newPath = list(currPath)
+                    newPath.append(friend)
+                    the_que.append(newPath)
+ 
         return visited
+
+
+
 
 
 if __name__ == '__main__':

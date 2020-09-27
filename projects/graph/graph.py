@@ -65,13 +65,13 @@ class Graph:
         track_set = set()
 
         while the_que.size() > 0:
-            curr = the_que.dequeue()
+            curr = the_que.popleft()
         
             if curr not in track_set:
                 print(curr)
                 track_set.add(curr)
-                for neighbour in self.vertices[curr]:
-                    the_que.enqueue(neighbour)
+                for neighbour in self.users[curr]:
+                    the_que.append(neighbour)
 
 
     def dft(self, starting_vertex):
